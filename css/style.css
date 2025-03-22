@@ -1,0 +1,310 @@
+/* Import Google Font for a modern and friendly look */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+
+/* ---------------
+   Variables & Nighttime Gradients
+--------------- */
+:root {
+  /* Nighttime-inspired gradients */
+  --light-gradient: linear-gradient(135deg, #0d1b2a, #1e3c72);
+  --dark-gradient: linear-gradient(135deg, #0a0a0a, #121212);
+
+  --card-bg-light: #1b263b;
+  --card-bg-light-opacity: 0.85;
+  --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+
+  --primary-color: #82aaff;   /* Soft blue accent */
+  --secondary-color: #6690e2; /* Slightly darker blue */
+  --text-color: #d0d0d0;
+  --border-radius: 20px;
+  --transition-speed: 0.3s;
+  --font-family: 'Quicksand', sans-serif;
+}
+
+/* Use the light gradient as the default background */
+body {
+  background: var(--light-gradient);
+  font-family: var(--font-family);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background var(--transition-speed);
+}
+
+/* Dark mode manual override */
+body.dark-mode {
+  background: var(--dark-gradient) !important;
+  --text-color: #e0e0e0;
+}
+
+body.dark-mode .card {
+  background: var(--dark-gradient) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.dark-mode .freq-button {
+  background: rgba(40, 40, 40, 0.85) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .hero-button {
+  background: rgba(40, 40, 40, 0.85) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .mp3-buttons button {
+  background: rgba(40, 40, 40, 0.85) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+}
+
+
+
+
+
+/* -------------------------
+   GLOBAL & CARD STYLES
+------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.card {
+  text-align: center;
+  background: var(--card-bg-light);
+  opacity: var(--card-bg-light-opacity);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  margin: 1rem;
+}
+
+/* -------------------------
+   HEADER / HERO
+------------------------- */
+.hero {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.hero-illustration {
+  margin-bottom: 1rem;
+}
+
+.illustration-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  margin: 0 auto 1rem;
+}
+
+.hero-text h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+}
+
+.hero-text p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.hero-button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background var(--transition-speed);
+}
+
+.hero-button:hover {
+  background: var(--secondary-color);
+}
+
+/* -------------------------
+   DARK MODE TOGGLE
+------------------------- */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-label {
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+
+.dark-mode-toggle input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* -------------------------
+   SECTIONS & RESPONSIVENESS
+------------------------- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Make the cards adjust on larger screens */
+@media (min-width: 768px) {
+  .card {
+    text-align: center;
+    margin: 1rem auto;
+    max-width: 600px;
+  }
+}
+
+/* Section subtitles */
+.section-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+}
+
+/* -------------------------
+   WHITE NOISE CONTROLS
+------------------------- */
+.frequency-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.freq-button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.8rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background var(--transition-speed);
+  min-width: 100px;
+}
+
+.freq-button:hover {
+  background: var(--secondary-color);
+}
+
+.freq-button.selected {
+  background: var(--secondary-color);
+}
+
+.freq-hz {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.volume-control {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.volume-control label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.volume-control input[type="range"] {
+  width: 100%;
+  appearance: none;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transition: background var(--transition-speed);
+  cursor: pointer;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+  background: var(--secondary-color);
+}
+
+.start-button {
+  background: #0d1b2a;
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background var(--transition-speed);
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.start-button:hover {
+  background: var(--secondary-color);
+}
+
+/* -------------------------
+   MP3 CONTROLS
+------------------------- */
+.mp3-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.mp3-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mp3-buttons button {
+  flex: 1;
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--primary-color);
+  color: #fff;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+
+.mp3-buttons button:hover {
+  background: var(--secondary-color);
+}
+
+/* -------------------------
+   FOOTER
+------------------------- */
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}

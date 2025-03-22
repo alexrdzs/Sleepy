@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex">
+<meta name="robots" content="noindex,nofollow">
+  <title>Baby Sleep Sounds</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😴</text></svg>">
+
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-illustration">
+      <!-- Emoji placeholder for a gentle nighttime image -->
+      <div class="illustration-circle">😴</div>
+    </div>
+    <div class="hero-text">
+      <h1>Sweet Dreams</h1>
+      <p>Cozy nighttime sounds for your little one</p>
+    </div>
+  <button class="hero-button" id="scrollToContent">Get Started</button> 
+  </header>
+
+  <main>
+    <!-- Dark Mode Toggle -->
+    <section class="dark-mode-toggle card">
+      <label class="toggle-label" for="darkModeCheckbox">Dim the Lights</label>
+      <input type="checkbox" id="darkModeCheckbox" />
+    </section>
+
+    <!-- White Noise Section -->
+    <section class="card" id="whiteNoiseSection">
+      <h2>White Noise</h2>
+      <p class="section-subtitle">A gentle hush to soothe your baby</p>
+
+      <div class="frequency-list">
+        <!-- Default frequency is 2900 Hz -->
+        <button class="freq-button selected" data-freq="2900">
+          Soft Hush<br><span class="freq-hz">(2900 Hz)</span>
+        </button>
+        <button class="freq-button" data-freq="4000">
+          Night Breeze<br><span class="freq-hz">(4000 Hz)</span>
+        </button>
+        <button class="freq-button" data-freq="6000">
+          Star Whisper<br><span class="freq-hz">(6000 Hz)</span>
+        </button>
+      </div>
+      <div class="volume-control">
+        <label for="noiseVolume">Volume: <span id="noiseVolumeValue">25%</span></label>
+        <!-- Default value set to 25 -->
+        <input type="range" id="noiseVolume" min="0" max="100" value="25" />
+      </div>
+      <button id="toggleWhiteNoise" class="start-button">Start White Noise</button>
+    </section>
+
+    <!-- MP3 Section -->
+    <section class="card" id="mp3Section">
+      <h2>Other Soothing Sounds</h2>
+      <p class="section-subtitle">Loop an MP3 lullaby or any calm track</p>
+      <div class="mp3-controls">
+        <label for="mp3Volume">Volume: <span id="mp3VolumeValue">25%</span></label>
+        <input type="range" id="mp3Volume" min="0" max="100" value="25" />
+        <!-- Audio element to play your MP3. Update the src or load it dynamically. -->
+        <audio id="lullabyAudio" src="" loop></audio>
+        <div class="mp3-buttons">
+          <button id="loadMp3Button">Load MP3</button>
+          <button id="toggleMp3Button" disabled>Play MP3</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2024 Baby Sleep Sounds. Wishing your baby sweet dreams.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

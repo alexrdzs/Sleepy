@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>White Noise Meditation</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    /* Light mode variables */
+    :root {
+      --primary-color: #4A90E2;
+      --secondary-color: #357ABD;
+      --background-gradient: linear-gradient(135deg, #fdfbfb, #ebedee);
+      --container-bg: rgba(255, 255, 255, 0.85);
+      --text-color: #333;
+      --button-text-color: #fff;
+      --button-border-radius: 25px;
+      --button-padding: 1rem 2rem;
+      --selected-bg: #357ABD;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark mode overrides */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: #1DB954;
+        --secondary-color: #1AA34A;
+        --background-gradient: linear-gradient(135deg, #121212, #1e1e1e);
+        --container-bg: rgba(40, 40, 40, 0.9);
+        --text-color: #e0e0e0;
+        --button-text-color: #fff;
+        --selected-bg: #1AA34A;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    /* Global resets and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: var(--background-gradient);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      background: var(--container-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background: var(--primary-color);
+      color: var(--button-text-color);
+      border: none;
+      padding: var(--button-padding);
+      border-radius: var(--button-border-radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin: 0.5rem;
+    }
+
+    button:hover {
+      background: var(--secondary-color);
+    }
+
+    .control-group {
+      margin-top: 1.5rem;
+      text-align: left;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .control-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+    }
+
+    .frequency-buttons {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .frequency-buttons button {
+      flex: 1 1 22%;
+      margin: 0.3rem;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      background: var(--primary-color);
+      color: var(--button-text-color);
+      border: none;
+      transition: background 0.3s ease;
+    }
+
+    .frequency-buttons button:hover {
+      background: var(--secondary-color);
+    }
+
+    .frequency-buttons button.selected {
+      background: var(--selected-bg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>White Noise Meditation</h1>
+    <p>Relax with soothing white noise, tailored for your night-time comfort.</p>
+    <button id="toggleButton">Start White Noise</button>
+
+    <div class="control-group">
+      <label for="volumeSlider">Volume: <span id="volumeValue">50%</span></label>
+      <input type="range" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+
+    <div class="control-group">
+      <label>Select Frequency (Hz):</label>
+      <div class="frequency-buttons">
+        <button class="freq-button" data-freq="4000">4000 Hz</button>
+        <button class="freq-button" data-freq="2900">2900 Hz</button>
+        <button class="freq-button" data-freq="5200">5200 Hz</button>
+        <button class="freq-button" data-freq="6500">6500 Hz</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let audioCtx;
+    let noiseNode;
+    let gainNode;
+    let filterNode;
+    let playing = false;
+    let selectedFrequency = 4000; // default frequency
+
+    // Frequency button logic
+    const freqButtons = document.querySelectorAll(".freq-button");
+    freqButtons.forEach(button => {
+      if (button.dataset.freq === String(selectedFrequency)) {
+        button.classList.add("selected");
+      }
+      button.addEventListener("click", function() {
+        freqButtons.forEach(btn => btn.classList.remove("selected"));
+        this.classList.add("selected");
+        selectedFrequency = Number(this.dataset.freq);
+        if (filterNode) {
+          filterNode.frequency.value = selectedFrequency;
+        }
+      });
+    });
+
+    function startWhiteNoise() {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      noiseNode = audioCtx.createScriptProcessor(4096, 1, 1);
+      noiseNode.onaudioprocess = function(e) {
+        const output = e.outputBuffer.getChannelData(0);
+        for (let i = 0; i < output.length; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+      };
+
+      filterNode = audioCtx.createBiquadFilter();
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = selectedFrequency;
+
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = document.getElementById("volumeSlider").value / 100;
+
+      noiseNode.connect(filterNode);
+      filterNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+    }
+
+    function stopWhiteNoise() {
+      if (noiseNode) {
+        noiseNode.disconnect();
+        noiseNode = null;
+      }
+      if (filterNode) {
+        filterNode.disconnect();
+        filterNode = null;
+      }
+      if (gainNode) {
+        gainNode.disconnect();
+        gainNode = null;
+      }
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+    }
+
+    document.getElementById("toggleButton").addEventListener("click", function() {
+      if (!playing) {
+        startWhiteNoise();
+        this.textContent = "Stop White Noise";
+      } else {
+        stopWhiteNoise();
+        this.textContent = "Start White Noise";
+      }
+      playing = !playing;
+    });
+
+    document.getElementById("volumeSlider").addEventListener("input", function() {
+      document.getElementById("volumeValue").textContent = this.value + "%";
+      if (gainNode) {
+        gainNode.gain.value = this.value / 100;
+      }
+    });
+  </script>
+</body>
+</html>
